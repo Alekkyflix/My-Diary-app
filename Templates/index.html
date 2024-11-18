@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diary App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>My Diary</h1>
+        <form action="/add_entry" method="post" enctype="multipart/form-data">
+            <textarea name="diaryEntry" placeholder="Write your thoughts..." required></textarea>
+            <input type="file" name="mediaInput" multiple accept="image/*,audio/*">
+            <button type="submit">Add Entry</button>
+        </form>
+        <div id="entries">
+            {% for entry in entries %}
+                <div class="entry">
+                    <p>{{ entry.text }}</p>
+                    {% for media in entry.media %}
+                        {% if media.endswith('.jpg') or media.endswith('.png') %}
+                            <img src="{{ url_for('static', filename='uploads/' + media) }}" alt="Image">
+                        {% elif media.endswith('.mp3') or media.endswith('.wav') %}
+                            <audio controls>
+                                <source src="{{ url_for('static', filename='uploads/' + media) }}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        {% endif %}
+                    {% endfor %}
+                    <form action="/delete_entry/{{ loop.index0 }}" method="post">
+                        <button type="submit">Delete Entry</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
