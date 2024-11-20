@@ -1,63 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Diary App</title>
-        <style>
-            /* Basic styles for the calendar */
-            table {
-                border-collapse: collapse;
-                width: 100%;
-            }
-            td, th {
-                border: 1px solid #ccc;
-                padding: 10px;
-                text-align: center;
-                height: 40px;
-            }
-            .marked {
-                background-color: rgb(24, 228, 201);
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Your Diary</h1>
-        
-        <form action="{{ url_for('add_entry') }}" method="POST" enctype="multipart/form-data">
-            <textarea name="diaryEntry" placeholder="Write your diary entry..."></textarea>
-            <input type="file" name="mediaInput" multiple>
-            <button type="submit">Save Entry</button>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diary App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>My Diary</h1>
+        <form action="/add_entry" method="post" enctype="multipart/form-data">
+            <textarea name="diaryEntry" placeholder="Write your thoughts..." required></textarea>
+            <input type="file" name="mediaInput" multiple accept="image/*,audio/*">
+            <button type="submit">Add Entry</button>
         </form>
-        
-        <h2>Entries</h2>
-        {% for entry in entries %}
-            <div>
-                <p>{{ entry.date }}: {{ entry.text }}</p>
-                {% for media in entry.media %}
-                    <img src="{{ url_for('static', filename='uploads/' + media) }}" alt="media" width="100">
-                {% endfor %}
-            </div>
-        {% endfor %}
-        
-        <h2>Calendar</h2>
-        <table>
-            {% for week in calendar.Calendar().monthdayscalendar(today.year, today.month) %}
-                <tr>
-                    {% for day in week %}
-                        {% if day == 0 %}
-                            <td></td>
-                        {% else %}
-                            {% set current_day = today.replace(day=day) %}
-                            <td class="{% if current_day in marked_dates %}marked{% endif %}">
-                                {{ day }}
-                            </td>
+        <div id="entries">
+            {% for entry in entries %}
+                <div class="entry">
+                    <p>{{ entry.text }}</p>
+                    {% for media in entry.media %}
+                        {% if media.endswith('.jpg') or media.endswith('.png') %}
+                            <img src="{{ url_for('static', filename='uploads/' + media) }}" alt="Image">
+                        {% elif media.endswith('.mp3') or media.endswith('.wav') %}
+                            <audio controls>
+                                <source src="{{ url_for('static', filename='uploads/' + media) }}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
                         {% endif %}
                     {% endfor %}
-                </tr>
+                    <form action="/delete_entry/{{ loop.index0 }}" method="post">
+                        <button type="submit">Delete Entry</button>
+                    </form>
+                </div>
             {% endfor %}
-        </table>
-
-    </body>
+        </div>
+    </div>
+</body>
 </html>
 
