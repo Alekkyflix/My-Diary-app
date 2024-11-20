@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Your Diary Entries</h1>
     <a href="{{ url_for('add_entry') }}">Add New Entry</a>
     <ul>
         {% for entry in entries %}
-            <li>{{ entry.content }} - <img src="{{ entry.media_url }}" alt="Media" style="max-width:100px;"></li>
+            <li>{{ entry.content }} - <img src="{{ entry.media_url }}" alt="Media"></li>
         {% endfor %}
     </ul>
     <a href="{{ url_for('logout') }}">Logout</a>
