@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Your Diary Entries</h1>
+    <a href="{{ url_for('add_entry') }}">Add New Entry</a>
+    <ul>
+        {% for entry in entries %}
+            <li>{{ entry.content }} - <img src="{{ entry.media_url }}" alt="Media" style="max-width:100px;"></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

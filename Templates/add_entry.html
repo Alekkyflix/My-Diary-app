@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Entry</title>
+</head>
+<body>
+    <h1>Add Diary Entry</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <textarea name="content" placeholder="Write your entry here..." required></textarea><br>
+        <input type="file" name="media"><br>
+        <button type="submit">Add Entry</button>
+    </form>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>
